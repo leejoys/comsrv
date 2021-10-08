@@ -3,6 +3,8 @@ package api
 import (
 	"comsrv/pkg/storage"
 	"encoding/json"
+	"fmt"
+	"io"
 	"net/http"
 	"strconv"
 	"time"
@@ -31,7 +33,7 @@ func (api *API) endpoints() {
 	// получить комментарии к новости n
 	api.r.HandleFunc("/comments", api.comments).Methods(http.MethodGet)
 	// сохранить комментарий
-	api.r.HandleFunc("/comments/{parentpost}/{parentcomment}", api.storeComment).Methods(http.MethodPost)
+	api.r.HandleFunc("/comments", api.storeComment).Methods(http.MethodPost)
 
 }
 
@@ -65,16 +67,17 @@ func (api *API) comments(w http.ResponseWriter, r *http.Request) {
 
 // сохранение комментария
 func (api *API) storeComment(w http.ResponseWriter, r *http.Request) {
-	var err error
-	c := storage.Comment{}
-	c.ParentPost, err = strconv.Atoi(mux.Vars(r)["parentpost"])
+
+	bComment, err := io.ReadAll(r.Body)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, fmt.Sprintf("storeComment ReadAll error: %s", err.Error()), http.StatusInternalServerError)
 		return
 	}
-	c.ParentComment, err = strconv.Atoi(mux.Vars(r)["parentcomment"])
+
+	c := storage.Comment{}
+	err = json.Unmarshal(bComment, &c)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, fmt.Sprintf("storeComment Unmarshal error: %s", err.Error()), http.StatusInternalServerError)
 		return
 	}
 	c.PubTime = time.Now().Unix()
