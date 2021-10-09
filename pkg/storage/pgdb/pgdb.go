@@ -78,7 +78,7 @@ func (s *Store) CommentsN(n int) ([]storage.Comment, error) {
 	rows, err := s.db.Query(context.Background(),
 		`SELECT 
 		comments.id, 
-		comments.autor, 
+		comments.author, 
 		comments.content, 
 		comments.pubtime, 
 		comments.parentpost,

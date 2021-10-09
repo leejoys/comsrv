@@ -10,4 +10,4 @@ parentcomment BIGINT
 );
 
 INSERT INTO comments (id, author, content, pubtime, parentpost, parentcomment) 
-VALUES (0, 'Админ', 'Содержание статьи', 0, 0, 0);
+VALUES (0, 'Админ', 'Содержание комментария', 0, 0, 0);
