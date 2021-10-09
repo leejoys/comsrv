@@ -31,7 +31,7 @@ func New(db storage.Interface) *API {
 // API handler registration
 func (api *API) endpoints() {
 	// получить комментарии к новости n
-	api.r.HandleFunc("/comments", api.comments).Methods(http.MethodGet)
+	api.r.HandleFunc("/comments/{n}", api.comments).Methods(http.MethodGet)
 	// сохранить комментарий
 	api.r.HandleFunc("/comments", api.storeComment).Methods(http.MethodPost)
 
@@ -70,14 +70,14 @@ func (api *API) storeComment(w http.ResponseWriter, r *http.Request) {
 
 	bComment, err := io.ReadAll(r.Body)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("storeComment ReadAll error: %s", err.Error()), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("comsrv storeComment ReadAll error: %s", err.Error()), http.StatusInternalServerError)
 		return
 	}
 
 	c := storage.Comment{}
 	err = json.Unmarshal(bComment, &c)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("storeComment Unmarshal error: %s", err.Error()), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("comsrv storeComment Unmarshal error: %s", err.Error()), http.StatusInternalServerError)
 		return
 	}
 	c.PubTime = time.Now().Unix()

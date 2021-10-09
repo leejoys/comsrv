@@ -1,13 +1,13 @@
-DROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS comments;
 
-CREATE TABLE IF NOT EXISTS posts(
+CREATE TABLE IF NOT EXISTS comments(
 id SERIAL PRIMARY KEY,
-title TEXT UNIQUE NOT NULL,
+author TEXT NOT NULL,
 content TEXT NOT NULL,
-pubdate TEXT NOT NULL,
 pubtime BIGINT NOT NULL,
-link TEXT NOT NULL
+parentpost BIGINT,
+parentcomment BIGINT
 );
 
-INSERT INTO posts (id, title, content, pubdate, pubtime, link) 
-VALUES (0, 'Статья', 'Содержание статьи', 0, 0, 'google.com');
+INSERT INTO comments (id, author, content, pubtime, parentpost, parentcomment) 
+VALUES (0, 'Админ', 'Содержание статьи', 0, 0, 0);
