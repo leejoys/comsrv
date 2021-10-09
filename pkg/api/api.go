@@ -43,7 +43,7 @@ func (api *API) Router() *mux.Router {
 	return api.r
 }
 
-// Получение всех публикаций.
+// получить комментарии к новости n
 func (api *API) comments(w http.ResponseWriter, r *http.Request) {
 	ns := mux.Vars(r)["n"]
 	n, err := strconv.Atoi(ns)
