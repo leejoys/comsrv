@@ -37,42 +37,6 @@ func (s *Store) Close() {
 	s.db.Close()
 }
 
-//Comments - получение всех публикаций
-func (s *Store) Comments() ([]storage.Comment, error) {
-	rows, err := s.db.Query(context.Background(),
-		`SELECT 
-		comments.id, 
-		comments.autor, 
-		comments.content, 
-		comments.pubtime, 
-		comments.parentpost,
-		comments.parentcomment
-	FROM comments;`)
-
-	if err != nil {
-		return nil, err
-	}
-
-	var posts []storage.Comment
-	for rows.Next() {
-		var p storage.Comment
-		err = rows.Scan(
-			&p.ID,
-			&p.Author,
-			&p.Content,
-			&p.PubTime,
-			&p.ParentPost,
-			&p.ParentComment,
-		)
-		if err != nil {
-			return nil, err
-		}
-		posts = append(posts, p)
-	}
-
-	return posts, rows.Err()
-}
-
 //CommentsN получить комментарии к новости n
 func (s *Store) CommentsN(n int) ([]storage.Comment, error) {
 	rows, err := s.db.Query(context.Background(),

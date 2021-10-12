@@ -12,11 +12,9 @@ type Comment struct {
 
 // Interface задаёт контракт на работу с БД.
 type Interface interface {
-	Comments() ([]Comment, error)     // получение всех комментариев
 	CommentsN(int) ([]Comment, error) // получение n последних комментариев
 	AddComment(Comment) error         // создание нового комментария
 	UpdateComment(Comment) error      // обновление комментария
 	DeleteComment(Comment) error      // удаление комментария по ID
 	Close()                           // освобождение ресурса
-	//	DropDB() error              //удаление БД
 }
