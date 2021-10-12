@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
 )
 
 // Сервер newssrv.
@@ -38,7 +39,12 @@ func main() {
 
 	// Запускаем веб-сервер на порту 8082 на всех интерфейсах.
 	// Предаём серверу маршрутизатор запросов.
+	go func() {
+		log.Fatal(http.ListenAndServe("localhost:8082", srv.api.Router()))
+	}()
 	log.Println("HTTP server is started on localhost:8082")
-	defer log.Println("HTTP server has been stopped")
-	log.Fatal(http.ListenAndServe(":8082", srv.api.Router()))
+	signalCh := make(chan os.Signal, 1)
+	signal.Notify(signalCh, os.Interrupt)
+	<-signalCh
+	log.Println("HTTP server has been stopped")
 }
