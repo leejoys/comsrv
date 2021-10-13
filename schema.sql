@@ -8,6 +8,3 @@ pubtime BIGINT NOT NULL,
 parentpost BIGINT,
 parentcomment BIGINT
 );
-
-INSERT INTO comments (id, author, content, pubtime, parentpost, parentcomment) 
-VALUES (0, 'Админ', 'Содержание комментария', 0, 0, 0);
